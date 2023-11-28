@@ -5,11 +5,12 @@ include_once("entidades/venta.php");
 
 $pg = "Inicio";
 $venta = new Venta();
-include_once("header.php"); 
+include_once("header.php");
 
 
-
-
+$_SESSION["aniofin"]=date("Y") ;
+$_SESSION["mesfin"]=date("m") ;
+$_SESSION["diafin"]=date("d") ;
 
 ?>
 

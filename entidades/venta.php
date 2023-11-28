@@ -249,6 +249,40 @@ class Venta {
         $mysqli->close();
         return $sumarizacion;
     }
+    
+public function imprimirTicket(){
+    $fechaComoEntero = strtotime($this->venta->fecha);
+    $anioDeVenta = date("Y", $fechaComoEntero);
+    $mesDeVenta = date("m", $fechaComoEntero);
+    $anioActual = date("Y");
+    $mesActual = date("m");
+    
+
+
+
+    echo "<table class='table table-hover border' style='width:400px'>";         
+    echo "<tr><th colspan='2' class='text-center'>Reporte de facturacion</th></tr>               
+    <tr>                 
+    <th>Fecha</th>                 
+    <td>" . date("d/m/Y H:i:s") . "</td>               
+    </tr>
+                   
+    <tr>                 
+    <th>Periodo de facturacion</th>                 
+    <td>" . "Ene/1/" . $anioDeVenta . " a " . "Dic/31/" . $anioActual . "</td>               
+    </tr>
+
+    <tr>                 
+    <th>Nombre</th>                 
+    <td>" . '$this->cliente->nombre' . "</td>               
+    </tr>               
+    <tr>                 
+    <th colspan='2'>Productos:</th>               
+    </tr>";               
+    echo "</table>";     
+}
+
+
 }
 
 
