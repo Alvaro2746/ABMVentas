@@ -17,8 +17,7 @@ $fechaDesde = "01/01/".$anio;
 $fechaDesde=date($fechaDesde);
 
 $ventasPeriodo=$venta->obtenerFacturacionPorPeriodo($fechaDesde, $fechaHasta);
-
-echo $ventasPeriodo;
+$venta = 
 
 
 

@@ -249,8 +249,28 @@ class Venta {
         $mysqli->close();
         return $sumarizacion;
     }
+
+    public function ventasPorCliente(){
+        $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
+        $sql = "SELECT SUM(total) AS cantidad FROM ventas 
+        WHERE YEAR(fecha) = '$anioActual';";
+
+        if (!$resultado = $mysqli->query($sql)) {
+            printf("Error en query: %s\n", $mysqli->error . " " . $sql);
+        }
+        $sumarizacion = 0;
+        //Convierte el resultado en un array asociativo
+        if ($fila = $resultado->fetch_assoc()) {
+            $sumarizacion = $fila["cantidad"] > 0 ? $fila["cantidad"] : 0;
+
+        }
+        $mysqli->close();
+        return $sumarizacion;
+    }
     
 public function imprimirTicket(){
+
+    $fechaventa = $this->venta->fecha;
     $fechaComoEntero = strtotime($this->venta->fecha);
     $anioDeVenta = date("Y", $fechaComoEntero);
     $mesDeVenta = date("m", $fechaComoEntero);
@@ -259,6 +279,7 @@ public function imprimirTicket(){
     
 
 
+    echo $fechaventa;
 
     echo "<table class='table table-hover border' style='width:400px'>";         
     echo "<tr><th colspan='2' class='text-center'>Reporte de facturacion</th></tr>               
@@ -273,7 +294,7 @@ public function imprimirTicket(){
     </tr>
 
     <tr>                 
-    <th>Nombre</th>                 
+    <th>Cliente</th>                 
     <td>" . '$this->cliente->nombre' . "</td>               
     </tr>               
     <tr>                 
