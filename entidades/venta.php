@@ -253,21 +253,22 @@ class Venta {
     public function ventasPorCliente(){
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
         $sql = "SELECT idcliente, 
-        (SELECT COUNT(idventa) FROM abmventas.ventas WHERE fk_idcliente=clientes.idcliente) AS ventas1
+        (SELECT COUNT(idventa) FROM abmventas.ventas WHERE fk_idcliente=clientes.idcliente) AS ventas
         FROM abmventas.clientes;";
 
 
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
         }
-        $sumarizacion = 0;
         //Convierte el resultado en un array asociativo
-        if ($fila = $resultado->fetch_assoc()) {
-            $sumarizacion = $fila["cantidad"] > 0 ? $fila["cantidad"] : 0;
 
+
+        if ($fila = $resultado->fetch_assoc()) {
+            $ventasCliente = $fila["ventas"];
         }
+        
         $mysqli->close();
-        return $sumarizacion;
+        return $ventasCliente;
     }
     
 public function imprimirTicket(){
