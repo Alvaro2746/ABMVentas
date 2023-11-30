@@ -252,8 +252,10 @@ class Venta {
 
     public function ventasPorCliente(){
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
-        $sql = "SELECT SUM(total) AS cantidad FROM ventas 
-        WHERE YEAR(fecha) = '$anioActual';";
+        $sql = "SELECT idcliente, 
+        (SELECT COUNT(idventa) FROM abmventas.ventas WHERE fk_idcliente=clientes.idcliente) AS ventas1
+        FROM abmventas.clientes;";
+
 
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
