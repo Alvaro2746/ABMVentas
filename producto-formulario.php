@@ -16,20 +16,27 @@ $productoaux->cargarFormulario($_REQUEST);
 
 
 if($_POST){
-
+    
+    
 
     if(isset($_POST["btnGuardar"])){
         if(isset($_GET["id"]) && $_GET["id"] > 0){
             $productoaux->obtenerPorId();
-
             
-                //se elimina imagen previa
+            
+            
+            
 
-                if ($productoaux->imagen){
-                    unlink("img/".$productoaux->imagen);
-                }
-                
-              //   se carga la imagen
+
+                if ($_FILES["archivo"]["name"]){
+                    // borramos imagen 
+                 
+                    
+                            //se elimina imagen previa
+                            unlink("img/".$productoaux->imagen);
+                        
+
+                //   se carga la imagen y remplazamos
               $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
               $file = $nombreAleatorio . $_FILES["archivo"]["name"];
               $url_temp = $_FILES["archivo"]["tmp_name"];
@@ -44,14 +51,17 @@ if($_POST){
               } else {
                   echo "Ha habido un error al cargar tu archivo.";
               }
+              
+              
+            }else{
+                $file=$productoaux->imagen;
+            }
+
+            
             //Actualizo un  registro existente
             
             $producto->imagen = $file;
             $producto->actualizar();
-
-            
-
-
 
               header("Location: producto-listado.php?msg=modificado");
 
@@ -59,6 +69,8 @@ if($_POST){
             //Es nuevo
 
             //   se carga la imagen
+            if ($_FILES["archivo"]["name"]){
+
             $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
             $file = $nombreAleatorio . $_FILES["archivo"]["name"];
             $url_temp = $_FILES["archivo"]["tmp_name"];
@@ -74,18 +86,22 @@ if($_POST){
                 echo "Ha habido un error al cargar tu archivo.";
             }
           //se agrego un  registro existente
-          $producto->imagen = $file;
-    $producto->insertar();
-
-
-            header("Location: producto-listado.php?msg=ingresado");
+        }else{
+          $producto->imagen = "no_photo.png";
+        }
+        $producto->insertar();
+        header("Location: producto-listado.php?msg=ingresado");
 
         }
     } else if(isset($_POST["btnBorrar"])){
+        $productoaux->obtenerPorId();
 
+        
         if ($productoaux->imagen){
+         
             unlink("img/".$productoaux->imagen);
         }
+        
         $producto->eliminar();
         
         header("Location: producto-listado.php?msg=eliminado");
