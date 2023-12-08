@@ -16,25 +16,27 @@ $productoaux->cargarFormulario($_REQUEST);
 
 
 if($_POST){
-    
-    
 
     if(isset($_POST["btnGuardar"])){
         if(isset($_GET["id"]) && $_GET["id"] > 0){
             $productoaux->obtenerPorId();
-            
-            
-            
-            
-
-
+            // $productoaux->imagen = ;
+                                
                 if ($_FILES["archivo"]["name"]){
                     // borramos imagen 
                  
                     
                             //se elimina imagen previa
-                            unlink("img/".$productoaux->imagen);
-                        
+                            if($productoaux->imagen == "no_photo.png")
+                            {
+                                
+                            }
+                            else
+                            {   
+
+                                
+                                unlink("img/".$productoaux->imagen);
+                            }   
 
                 //   se carga la imagen y remplazamos
               $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
@@ -99,8 +101,14 @@ if($_POST){
         
         if ($productoaux->imagen){
          
-            unlink("img/".$productoaux->imagen);
-        }
+            if($productoaux->imagen == "no_photo.png")
+            {
+                
+            }
+            else
+            {   
+                unlink("img/".$productoaux->imagen);
+            }         }
         
         $producto->eliminar();
         
