@@ -8,22 +8,45 @@ $pg = "Edición de usuario";
 $usuario = new Usuario();
 $usuario->cargarFormulario($_REQUEST);
 
-if ($_POST) {
 
+if ($_POST) {
+    
     $usuarioAux = new Usuario();
     $usuarioAux2 = new Usuario();
     $usuarioAux->obtenerPorUsuario($usuario->usuario);
     $usuarioAux2->obtenerPorCorreo($usuario->correo);
+
    
 
     if (isset($_POST["btnGuardar"])) {
         if (isset($_GET["id"]) && $_GET["id"] > 0) {
             //Actualizo un usuario existente
+
+            $usuarioGet = new Usuario();
+            $usuarioGet->idusuario=$_GET["id"];
+            $usuarioGet->obtenerPorId();
+
+
+            
+            if($_POST["txtUsuario"] == $usuarioAux->usuario && $_POST["txtUsuario"] != $usuarioGet->usuario){
+                //el usuario existe
+                $msgcrear="el usuario ya existe";
+                $msgaux=1;
+
+            } elseif($_POST["txtCorreo"] == $usuarioAux2->correo && $_POST["txtCorreo"] != $usuarioGet->correo) {
+                //el Correo existe
+                
+                $msgcrear="Correo Electronico ya esta asosiado a otro usuario";
+                $msgaux=2;
+            }else{
+
+
             $usuario->actualizar();
             $_SESSION["msgmodi"]="Usuario modificado con exito";
         $_SESSION["msgmodiaux"]=1;
 
         header("Location: usuario-listado.php");
+            }
 
         } else {            
             //Es nuevo
@@ -55,11 +78,13 @@ if ($_POST) {
 
         header("Location: usuario-listado.php");
     }
+
 }
 
 if (isset($_GET["id"]) && $_GET["id"] > 0) {
     $usuario->obtenerPorId();
 }
+
 
 
 include_once "header.php";
@@ -111,6 +136,8 @@ include_once "header.php";
             <input type="password" class="form-control" name="txtClave" id="txtClave" value="">
             <small>Completar únicamente para cambiar la clave</small>
         </div>
+        
+
     </div>
 </div>
 <!-- /.container-fluid -->
