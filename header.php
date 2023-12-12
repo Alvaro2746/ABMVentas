@@ -1,8 +1,16 @@
 <?php
+
+include_once "entidades/usuario.php";
+
 if (isset($_POST["btnCerrar"])) {
   session_destroy();
   header("Location: login.php");
+
+
 }
+$usuarioSession = new Usuario;
+$usuarioSession->idusuario=$_SESSION["id"];
+$usuarioSession->obtenerPorId();
 
 ?>
 
@@ -95,7 +103,7 @@ if (isset($_POST["btnCerrar"])) {
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $_SESSION['nombre']; ?></span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile rounded-circle" src="foto_perfil/<?php echo $usuarioSession->imagen?>  ">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

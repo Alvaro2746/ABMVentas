@@ -23,6 +23,7 @@ if ($_POST){
   if ($entidadUsuario->usuario ==$usuario &&  password_verify("$clave", $entidadUsuario->clave)){
 
     $_SESSION["nombre"]= "$entidadUsuario->nombre $entidadUsuario->apellido";
+    $_SESSION["id"]= "$entidadUsuario->idusuario";
     header("location: index.php");  
 
   }else

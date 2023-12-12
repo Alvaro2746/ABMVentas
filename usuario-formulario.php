@@ -27,7 +27,47 @@ if ($_POST) {
             $usuarioGet->obtenerPorId();
 
 
-            
+                    // $productoaux->imagen = ;
+                                        
+                        if ($_FILES["archivo"]["name"]){
+                            // borramos imagen 
+                         
+                            
+                                    //se elimina imagen previa
+                                    if($usuarioGet->imagen == "no_photo.png")
+                                    {
+                                        
+                                    }
+                                    else
+                                    {   
+        
+                                        
+                                        unlink("foto_perfil/".$usuarioGet->imagen);
+                                    }   
+        
+                        //   se carga la imagen y remplazamos
+                      $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
+                      $file = $nombreAleatorio . $_FILES["archivo"]["name"];
+                      $url_temp = $_FILES["archivo"]["tmp_name"];
+                      $url_insert = dirname(__FILE__) . "/foto_perfil";
+                      $url_target = str_replace('\\', '/', $url_insert) . '/' . $file;
+                      if (!file_exists($url_insert)) {
+                          mkdir($url_insert, 0777, true);
+                      };
+                      if (move_uploaded_file($url_temp, $url_target)) {
+                          echo "El archivo " . htmlspecialchars(basename($file)) . " ha sido cargado con éxito.";
+                  
+                      } else {
+                          echo "Ha habido un error al cargar tu archivo.";
+                      }
+                      
+                      
+                    }else{
+                        $file=$usuarioGet->imagen;
+                    }
+        
+
+
             if($_POST["txtUsuario"] == $usuarioAux->usuario && $_POST["txtUsuario"] != $usuarioGet->usuario){
                 //el usuario existe
                 $msgcrear="el usuario ya existe";
@@ -136,7 +176,11 @@ include_once "header.php";
             <input type="password" class="form-control" name="txtClave" id="txtClave" value="">
             <small>Completar únicamente para cambiar la clave</small>
         </div>
-        
+        <div class="col-6 form-group">
+            <label for="perfil">foto de perfil:</label>
+            <input type="file" class="form-control-file" name="perfil" id="perfil">
+            <img src="foto_perfil/<?php echo $usuario->imagen; ?>" class="img-thumbnail">
+        </div>
 
     </div>
 </div>

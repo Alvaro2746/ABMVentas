@@ -7,6 +7,7 @@ class Usuario {
     private $nombre;
     private $apellido;
     private $correo;
+    private $imagen;
 
     public function __construct(){
 
@@ -40,13 +41,15 @@ class Usuario {
                     clave, 
                     nombre,
                     apellido, 
-                    correo
+                    correo,
+                    imagen
                 ) VALUES (
                     '" . $this->usuario ."', 
                     '" . $this->clave ."', 
                     '" . $this->nombre ."',
                     '" . $this->apellido ."',
-                    '" . $this->correo ."'
+                    '" . $this->correo ."',
+                    '" . $this->imagen ."'
                 );";
         //Ejecuta la query
         if (!$mysqli->query($sql)) {
@@ -69,14 +72,17 @@ class Usuario {
                 nombre = '$this->nombre',
                 apellido = '$this->apellido',
                 clave = '$this->clave',
-                correo = '$this->correo'
+                correo = '$this->correo',
+                correo = '$this->imagen'
+
                 WHERE idusuario = " . $this->idusuario;
         } else {
         $sql = "UPDATE usuarios SET
                 usuario = '$this->usuario',
                 nombre = '$this->nombre',
                 apellido = '$this->apellido',
-                correo = '$this->correo'
+                correo = '$this->correo',
+                correo = '$this->imagen'
                 WHERE idusuario = " . $this->idusuario;
         }
         if (!$mysqli->query($sql)) {
@@ -102,7 +108,8 @@ class Usuario {
                         clave,
                         nombre,
                         apellido, 
-                        correo
+                        correo,
+                        imagen
                 FROM usuarios 
                 WHERE idusuario = " . $this->idusuario;
         if (!$resultado = $mysqli->query($sql)) {
@@ -117,6 +124,7 @@ class Usuario {
             $this->nombre = $fila["nombre"];
             $this->apellido = $fila["apellido"];
             $this->correo = $fila["correo"];
+            $this->imagen = $fila["imagen"];
         }
         $mysqli->close();
     }
@@ -128,7 +136,8 @@ class Usuario {
                         clave,
                         nombre,
                         apellido, 
-                        correo
+                        correo,
+                        imagen
                 FROM usuarios 
                 WHERE usuario = '$usuario'";
         if (!$resultado = $mysqli->query($sql)) {
@@ -143,6 +152,7 @@ class Usuario {
             $this->nombre = $fila["nombre"];
             $this->apellido = $fila["apellido"];
             $this->correo = $fila["correo"];
+            $this->correo = $fila["imagen"];
         }
         $mysqli->close();
     }
@@ -154,7 +164,8 @@ class Usuario {
                         clave,
                         nombre,
                         apellido, 
-                        correo
+                        correo,
+                        imagen
                 FROM usuarios 
                 WHERE correo = '$correo'";
         if (!$resultado = $mysqli->query($sql)) {
@@ -169,13 +180,14 @@ class Usuario {
             $this->nombre = $fila["nombre"];
             $this->apellido = $fila["apellido"];
             $this->correo = $fila["correo"];
+            $this->imagen = $fila["imagen"];
         }
         $mysqli->close();
     }
 
     public function obtenerTodos(){
         $mysqli = new mysqli(Config::BBDD_HOST, Config::BBDD_USUARIO, Config::BBDD_CLAVE, Config::BBDD_NOMBRE, Config::BBDD_PORT);
-        $sql = "SELECT idusuario, usuario, clave, nombre, apellido, correo FROM usuarios";
+        $sql = "SELECT idusuario, usuario, clave, nombre, apellido, correo, imagen FROM usuarios";
         if (!$resultado = $mysqli->query($sql)) {
             printf("Error en query: %s\n", $mysqli->error . " " . $sql);
         }
@@ -191,6 +203,7 @@ class Usuario {
                 $entidadAux->nombre = $fila["nombre"];
                 $entidadAux->apellido = $fila["apellido"];
                 $entidadAux->correo = $fila["correo"];
+                $entidadAux->imagen = $fila["imagen"];
                 $aResultado[] = $entidadAux;
             }
         }
