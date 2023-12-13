@@ -12,6 +12,11 @@ $usuarioSession = new Usuario;
 $usuarioSession->idusuario=$_SESSION["id"];
 $usuarioSession->obtenerPorId();
 
+if (isset($_GET["yes"])){
+  header("Location: usuario-formulario.php?id=$usuarioSession->idusuario");
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +112,7 @@ $usuarioSession->obtenerPorId();
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="index.php?yes">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Cuenta
                 </a>

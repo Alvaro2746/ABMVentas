@@ -29,36 +29,34 @@ if ($_POST) {
 
                     // $productoaux->imagen = ;
                                         
-                        if ($_FILES["archivo"]["name"]){
+                        if ($_FILES["perfil"]["name"]){
                             // borramos imagen 
-                         
                             
                                     //se elimina imagen previa
-                                    if($usuarioGet->imagen == "no_photo.png")
+                                    if($usuarioGet->imagen != "no_perfil.png")
                                     {
                                         
-                                    }
-                                    else
-                                    {   
-        
-                                        
+               
                                         unlink("foto_perfil/".$usuarioGet->imagen);
-                                    }   
+
+                                    }
+                                    
+           
         
                         //   se carga la imagen y remplazamos
                       $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
-                      $file = $nombreAleatorio . $_FILES["archivo"]["name"];
-                      $url_temp = $_FILES["archivo"]["tmp_name"];
+                      $file = $nombreAleatorio . $_FILES["perfil"]["name"];
+                      $url_temp = $_FILES["perfil"]["tmp_name"];
                       $url_insert = dirname(__FILE__) . "/foto_perfil";
                       $url_target = str_replace('\\', '/', $url_insert) . '/' . $file;
                       if (!file_exists($url_insert)) {
                           mkdir($url_insert, 0777, true);
                       };
                       if (move_uploaded_file($url_temp, $url_target)) {
-                          echo "El archivo " . htmlspecialchars(basename($file)) . " ha sido cargado con éxito.";
+                          echo "El perfil " . htmlspecialchars(basename($file)) . " ha sido cargado con éxito.";
                   
                       } else {
-                          echo "Ha habido un error al cargar tu archivo.";
+                          echo "Ha habido un error al cargar tu perfil.";
                       }
                       
                       
@@ -80,7 +78,7 @@ if ($_POST) {
                 $msgaux=2;
             }else{
 
-
+            $usuario->imagen=$file;
             $usuario->actualizar();
             $_SESSION["msgmodi"]="Usuario modificado con exito";
         $_SESSION["msgmodiaux"]=1;
@@ -90,6 +88,33 @@ if ($_POST) {
 
         } else {            
             //Es nuevo
+
+
+            if ($_FILES["perfil"]["name"]){
+                        //se elimina imagen previa
+                        if($usuarioGet->imagen != "no_perfil.png")
+                        {
+                            unlink("foto_perfil/".$usuarioGet->imagen);
+                        }
+            //   se carga la imagen y remplazamos
+          $nombreAleatorio = date("Ymdhmsi") . rand(1000, 2000); //se asigna nombre aleatorio
+          $file = $nombreAleatorio . $_FILES["perfil"]["name"];
+          $url_temp = $_FILES["perfil"]["tmp_name"];
+          $url_insert = dirname(__FILE__) . "/foto_perfil";
+          $url_target = str_replace('\\', '/', $url_insert) . '/' . $file;
+          if (!file_exists($url_insert)) {
+              mkdir($url_insert, 0777, true);
+          };
+          if (move_uploaded_file($url_temp, $url_target)) {
+              echo "El perfil " . htmlspecialchars(basename($file)) . " ha sido cargado con éxito.";
+          } else {
+              echo "Ha habido un error al cargar tu perfil.";
+          }
+          }else{
+            $file="no_perfil.png";
+        }
+    
+
             if($_POST["txtUsuario"] == $usuarioAux->usuario){
                 //el usuario existe
                 $msgcrear="el usuario ya existe";
@@ -102,7 +127,7 @@ if ($_POST) {
                 $msgaux=2;
             }else{
              //el usuario NO existe
-             
+            $usuario->imagen=$file;
             $usuario->insertar();
             $_SESSION["msgmodi"]="Usuario agregado con exito";
         $_SESSION["msgmodiaux"]=2;
@@ -111,13 +136,47 @@ if ($_POST) {
     
         }
     }
-    } else if (isset($_POST["btnBorrar"])) {
-        $usuario->eliminar();
-        $_SESSION["msgmodi"]="Usuario eliminado con exito";
+    } 
+    
+    if (isset($_POST["btnBorrar"])) {
+
+        if (isset($_GET["id"]) && $_GET["id"] > 0) {
+            //Actualizo un usuario existente
+
+            $usuarioGet = new Usuario();
+            $usuarioGet->idusuario=$_GET["id"];
+            $usuarioGet->obtenerPorId();
+
+        if ($usuarioGet->idusuario == $_SESSION["id"]){
+
+
+            if($usuarioGet->imagen != "no_perfil.png")
+            {
+                unlink("foto_perfil/".$usuarioGet->imagen);
+            }
+            $usuario->eliminar();
+            session_destroy();
+            header("Location: login.php");          
+        }else{
+
+            if($usuarioGet->imagen != "no_perfil.png")
+            {
+                unlink("foto_perfil/".$usuarioGet->imagen);
+            }
+            $usuario->eliminar();
+            $_SESSION["msgmodi"]="Usuario eliminado con exito";
+            $_SESSION["msgmodiaux"]=3;
+    
+            header("Location: usuario-listado.php");    
+        }
+    }else{
+        $_SESSION["msgmodi"]="Usuario no existe";
         $_SESSION["msgmodiaux"]=3;
 
-        header("Location: usuario-listado.php");
+        header("Location: usuario-listado.php");    
+
     }
+}
 
 }
 

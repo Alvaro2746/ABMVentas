@@ -73,7 +73,7 @@ class Usuario {
                 apellido = '$this->apellido',
                 clave = '$this->clave',
                 correo = '$this->correo',
-                correo = '$this->imagen'
+                imagen = '$this->imagen'
 
                 WHERE idusuario = " . $this->idusuario;
         } else {
@@ -82,7 +82,7 @@ class Usuario {
                 nombre = '$this->nombre',
                 apellido = '$this->apellido',
                 correo = '$this->correo',
-                correo = '$this->imagen'
+                imagen = '$this->imagen'
                 WHERE idusuario = " . $this->idusuario;
         }
         if (!$mysqli->query($sql)) {
